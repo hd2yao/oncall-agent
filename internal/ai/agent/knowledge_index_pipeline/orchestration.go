@@ -3,10 +3,11 @@ package knowledge_index_pipeline
 import (
 	"context"
 
+	"github.com/cloudwego/eino/components/document"
 	"github.com/cloudwego/eino/compose"
 )
 
-func BuildKnowledgeIndexing(ctx context.Context) (r compose.Runnable[any, any], err error) {
+func BuildKnowledgeIndexing(ctx context.Context) (r compose.Runnable[document.Source, []string], err error) {
 	// 节点定义
 	const (
 		FileLoader       = "FileLoader"
@@ -15,7 +16,7 @@ func BuildKnowledgeIndexing(ctx context.Context) (r compose.Runnable[any, any], 
 	)
 
 	// 创建图
-	g := compose.NewGraph[any, any]()
+	g := compose.NewGraph[document.Source, []string]()
 
 	// FileLoader 节点
 	fileLoaderKeyOfLoader, err := newLoader(ctx)
