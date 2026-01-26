@@ -8,7 +8,7 @@ require (
 	github.com/cloudwego/eino v0.7.19
 	github.com/cloudwego/eino-ext/components/document/loader/file v0.0.0-20260115090517-94ed114d488d
 	github.com/cloudwego/eino-ext/components/document/transformer/splitter/markdown v0.0.0-20260115090517-94ed114d488d
-	github.com/cloudwego/eino-ext/components/embedding/openai v0.0.0-20260115090517-94ed114d488d
+	github.com/cloudwego/eino-ext/components/embedding/openai v0.0.0-20260122064704-d8be5ee82c09
 	github.com/cloudwego/eino-ext/components/indexer/redis v0.0.0-20260115090517-94ed114d488d
 	github.com/gogf/gf/v2 v2.9.7
 	github.com/milvus-io/milvus-sdk-go/v2 v2.4.2
@@ -24,7 +24,11 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/clbanning/mxj/v2 v2.7.0 // indirect
 	github.com/cloudwego/base64x v0.1.6 // indirect
-	github.com/cloudwego/eino-ext/libs/acl/openai v0.1.2 // indirect
+	github.com/cloudwego/eino-ext/components/model/openai v0.1.8
+	github.com/cloudwego/eino-ext/components/retriever/redis v0.0.0-20260122064704-d8be5ee82c09
+	github.com/cloudwego/eino-ext/components/tool/duckduckgo v0.0.0-20260122064704-d8be5ee82c09
+	github.com/cloudwego/eino-ext/components/tool/googlesearch v0.0.0-20260122064704-d8be5ee82c09
+	github.com/cloudwego/eino-ext/libs/acl/openai v0.1.13 // indirect
 	github.com/cockroachdb/errors v1.9.1 // indirect
 	github.com/cockroachdb/logtags v0.0.0-20211118104740-dabe8e521a4f // indirect
 	github.com/cockroachdb/redact v1.1.3 // indirect
@@ -54,7 +58,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
-	github.com/meguminnnnnnnnn/go-openai v0.1.0 // indirect
+	github.com/meguminnnnnnnnn/go-openai v0.1.1 // indirect
 	github.com/milvus-io/milvus-proto/go-api/v2 v2.4.10-0.20240819025435-512e3b98866a // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
@@ -82,12 +86,12 @@ require (
 	go.opentelemetry.io/otel/trace v1.38.0 // indirect
 	golang.org/x/arch v0.15.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sync v0.14.0 // indirect
+	golang.org/x/net v0.41.0 // indirect
+	golang.org/x/sync v0.15.0 // indirect
 	golang.org/x/sys v0.35.0 // indirect
-	golang.org/x/text v0.25.0 // indirect
+	golang.org/x/text v0.26.0 // indirect
 	google.golang.org/genproto v0.0.0-20220503193339-ba3ae3f07e29 // indirect
-	google.golang.org/grpc v1.48.0 // indirect
-	google.golang.org/protobuf v1.33.0 // indirect
+	google.golang.org/grpc v1.67.1 // indirect
+	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
