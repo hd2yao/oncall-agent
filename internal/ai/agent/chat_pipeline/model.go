@@ -3,14 +3,13 @@ package chat_pipeline
 import (
 	"context"
 
-	"github.com/cloudwego/eino-ext/components/model/openai"
 	"github.com/cloudwego/eino/components/model"
+
+	"github.com/hd2yao/oncall-agent/internal/ai/models"
 )
 
-func newChatModel(ctx context.Context) (cm model.ChatModel, err error) {
-	// TODO Modify component configuration here.
-	config := &openai.ChatModelConfig{}
-	cm, err = openai.NewChatModel(ctx, config)
+func newChatModel(ctx context.Context) (cm model.ToolCallingChatModel, err error) {
+	cm, err = models.OpenAIForDeepSeekV3Quick(ctx)
 	if err != nil {
 		return nil, err
 	}

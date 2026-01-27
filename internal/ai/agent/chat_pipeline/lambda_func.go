@@ -2,14 +2,19 @@ package chat_pipeline
 
 import (
 	"context"
+	"time"
 )
 
-// newLambda component initialization function of node 'InputToRag' in graph 'EinoAgent'
-func newLambda(ctx context.Context, input *UserMessage, opts ...any) (output string, err error) {
+// newInputToRagLambda component initialization function of node 'InputToRag' in graph 'EinoAgent'
+func newInputToRagLambda(ctx context.Context, input *UserMessage, opts ...any) (output string, err error) {
 	panic("implement me")
 }
 
-// newLambda2 component initialization function of node 'InputToChat' in graph 'EinoAgent'
-func newLambda2(ctx context.Context, input *UserMessage, opts ...any) (output map[string]any, err error) {
-	panic("implement me")
+// newInputToChatLambda component initialization function of node 'InputToChat' in graph 'EinoAgent'
+func newInputToChatLambda(ctx context.Context, input *UserMessage, opts ...any) (output map[string]any, err error) {
+	return map[string]any{
+		"content": input.Query,
+		"history": input.History,
+		"date":    time.Now().Format("2006-01-02 15:04:05"),
+	}, nil
 }
