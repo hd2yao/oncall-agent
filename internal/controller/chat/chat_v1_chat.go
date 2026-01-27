@@ -19,7 +19,7 @@ func (c *ControllerV1) Chat(ctx context.Context, req *v1.ChatReq) (res *v1.ChatR
 	userMessage := &chat_pipeline.UserMessage{
 		ID:      id,
 		Query:   msg,
-		History: mem.GetSimpleMemory(id).GetMessages(),
+		History: mem.GetSimpleMemory(id).GetMessagesWithSummary(),
 	}
 
 	// 2. 创建对话 Agent 的执行器
@@ -37,6 +37,7 @@ func (c *ControllerV1) Chat(ctx context.Context, req *v1.ChatReq) (res *v1.ChatR
 	// 4. 将本轮对话存入系统
 	mem.GetSimpleMemory(id).SetMessages(schema.UserMessage(msg))
 	mem.GetSimpleMemory(id).SetMessages(schema.SystemMessage(out.Content))
+	compressMemory(ctx, id)
 
 	// 5. 返回消息
 	res = &v1.ChatRes{

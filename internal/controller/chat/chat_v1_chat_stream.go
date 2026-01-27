@@ -30,7 +30,7 @@ func (c *ControllerV1) ChatStream(ctx context.Context, req *v1.ChatStreamReq) (r
 	userMessage := &chat_pipeline.UserMessage{
 		ID:      id,
 		Query:   msg,
-		History: mem.GetSimpleMemory(id).GetMessages(),
+		History: mem.GetSimpleMemory(id).GetMessagesWithSummary(),
 	}
 
 	runner, err := chat_pipeline.BuildChatAgent(ctx)
@@ -49,6 +49,7 @@ func (c *ControllerV1) ChatStream(ctx context.Context, req *v1.ChatStreamReq) (r
 		if completeResponse != "" {
 			mem.GetSimpleMemory(id).SetMessages(schema.UserMessage(msg))
 			mem.GetSimpleMemory(id).SetMessages(schema.SystemMessage(completeResponse))
+			compressMemory(ctx, id)
 		}
 	}()
 
