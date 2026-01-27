@@ -6,10 +6,15 @@ package chat
 
 import (
 	"github.com/hd2yao/oncall-agent/api/chat"
+	"github.com/hd2yao/oncall-agent/internal/logic/sse"
 )
 
-type ControllerV1 struct{}
+type ControllerV1 struct {
+	service *sse.Service
+}
 
 func NewV1() chat.IChatV1 {
-	return &ControllerV1{}
+	return &ControllerV1{
+		service: sse.New(),
+	}
 }

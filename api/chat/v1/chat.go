@@ -11,6 +11,14 @@ type ChatRes struct {
 	Answer string `json:"answer"`
 }
 
+type ChatStreamReq struct {
+	g.Meta   `path:"/chat_stream" method:"post" summary:"流式对话"`
+	Id       string
+	Question string
+}
+
+type ChatStreamRes struct{}
+
 type FileUploadReq struct {
 	g.Meta `path:"/upload" method:"post" mime:"multipart/form-data" summary:"文件上传"`
 }
