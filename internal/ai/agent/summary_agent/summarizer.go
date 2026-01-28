@@ -6,17 +6,7 @@ import (
 	"strings"
 
 	"github.com/cloudwego/eino/schema"
-
-	"github.com/hd2yao/oncall-agent/internal/ai/models"
 )
-
-const summarySystemPrompt = `你是一个对话总结助手。
-你的任务是把历史对话压缩成简洁、可延续的上下文记忆。
-要求：
-1. 保留关键事实、用户偏好、已确认的结论、未完成的事项。
-2. 删除寒暄、重复内容和无关细节。
-3. 输出使用中文纯文本，控制在 6-10 行以内。
-4. 输出应可直接作为后续对话的背景记忆。`
 
 // SummarizeHistory summarizes dropped conversation history and merges it with any existing summary.
 func SummarizeHistory(ctx context.Context, existingSummary string, dropped []*schema.Message) (string, error) {
@@ -24,23 +14,20 @@ func SummarizeHistory(ctx context.Context, existingSummary string, dropped []*sc
 		return existingSummary, nil
 	}
 
-	chatModel, err := models.OpenAIForDeepSeekV3Quick(ctx)
+	runner, err := BuildSummaryAgent(ctx)
 	if err != nil {
 		return "", err
 	}
 
-	historyText := formatMessages(dropped)
-	userPrompt := buildSummaryPrompt(existingSummary, historyText)
-
-	resp, err := chatModel.Generate(ctx, []*schema.Message{
-		schema.SystemMessage(summarySystemPrompt),
-		schema.UserMessage(userPrompt),
+	summary, err := runner.Invoke(ctx, &SummaryInput{
+		ExistingSummary: existingSummary,
+		Dropped:         dropped,
 	})
 	if err != nil {
 		return "", err
 	}
 
-	summary := strings.TrimSpace(resp.Content)
+	summary = strings.TrimSpace(summary)
 	if summary == "" {
 		return existingSummary, nil
 	}

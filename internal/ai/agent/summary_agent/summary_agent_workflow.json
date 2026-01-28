@@ -1,0 +1,309 @@
+{
+  "name": "SummaryAgent",
+  "node_trigger_mode": "AllPredecessor",
+  "input_type": {
+    "title": "*SummaryInput"
+  },
+  "output_type": {
+    "title": "string",
+    "description": "summary text"
+  },
+  "gen_local_state": {
+    "output_type": {}
+  },
+  "id": "SummaryAgentGraph",
+  "component": "Graph",
+  "nodes": [
+    {
+      "id": "start",
+      "key": "start",
+      "name": "Start",
+      "type": "start",
+      "layoutData": {
+        "position": {
+          "x": 80,
+          "y": 360
+        }
+      }
+    },
+    {
+      "id": "end",
+      "key": "end",
+      "name": "End",
+      "type": "end",
+      "layoutData": {
+        "position": {
+          "x": 1540,
+          "y": 360
+        }
+      }
+    },
+    {
+      "id": "InputToTemplate",
+      "key": "InputToTemplate",
+      "name": "SummaryInputToTemplate",
+      "type": "Lambda",
+      "component_schema": {
+        "name": "Lambda",
+        "component": "Lambda",
+        "component_source": "custom",
+        "input_type": {
+          "title": "*SummaryInput",
+          "description": ""
+        },
+        "output_type": {
+          "title": "map[string]any",
+          "description": ""
+        },
+        "extra_property": {
+          "schema": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "has_option": {
+                "type": "boolean",
+                "description": ""
+              },
+              "interaction_type": {
+                "type": "string",
+                "description": "",
+                "enum": [
+                  "invoke",
+                  "stream",
+                  "collect",
+                  "transform"
+                ]
+              },
+              "option_package_path": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "propertyOrder": [
+              "has_option",
+              "interaction_type",
+              "option_package_path"
+            ]
+          }
+        },
+        "is_io_type_mutable": false,
+        "version": "1.0.0"
+      },
+      "layoutData": {
+        "position": {
+          "x": 320,
+          "y": 360
+        }
+      },
+      "node_option": {}
+    },
+    {
+      "id": "ChatTemplate",
+      "key": "ChatTemplate",
+      "name": "ChatTemplate",
+      "type": "ChatTemplate",
+      "component_schema": {
+        "name": "chatTemplate",
+        "component": "ChatTemplate",
+        "component_source": "official",
+        "identifier": "github.com/cloudwego/eino/components/prompt",
+        "input_type": {
+          "title": "map[string]any",
+          "description": ""
+        },
+        "output_type": {
+          "title": "[]*schema.Message",
+          "description": ""
+        },
+        "config": {
+          "description": "github.com/cloudwego/eino/blob/main/components/prompt/chat_template.go",
+          "schema": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "FormatType": {
+                "type": "number",
+                "description": "",
+                "enum": [
+                  "0",
+                  "1",
+                  "2"
+                ]
+              }
+            },
+            "propertyOrder": [
+              "FormatType"
+            ]
+          },
+          "config_input": "{\"FormatType\":1}"
+        },
+        "is_io_type_mutable": false,
+        "version": "1.0.0"
+      },
+      "layoutData": {
+        "position": {
+          "x": 620,
+          "y": 360
+        }
+      },
+      "node_option": {}
+    },
+    {
+      "id": "ChatModel",
+      "key": "ChatModel",
+      "name": "ChatModel",
+      "type": "ChatModel",
+      "component_schema": {
+        "name": "openai",
+        "component": "ChatModel",
+        "component_source": "official",
+        "identifier": "github.com/cloudwego/eino-ext/components/model/openai",
+        "input_type": {
+          "title": "[]*schema.Message",
+          "description": ""
+        },
+        "output_type": {
+          "title": "*schema.Message",
+          "description": ""
+        },
+        "config": {
+          "description": "github.com/cloudwego/eino-ext/blob/main/components/model/openai/chatmodel.go",
+          "schema": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "APIKey": {
+                "type": "string",
+                "description": ""
+              },
+              "BaseURL": {
+                "type": "string",
+                "description": ""
+              },
+              "Model": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "propertyOrder": [
+              "Model",
+              "APIKey",
+              "BaseURL"
+            ]
+          },
+          "config_input": "{}"
+        },
+        "is_io_type_mutable": false,
+        "version": "1.0.0"
+      },
+      "layoutData": {
+        "position": {
+          "x": 940,
+          "y": 360
+        }
+      },
+      "node_option": {}
+    },
+    {
+      "id": "OutputToSummary",
+      "key": "OutputToSummary",
+      "name": "OutputToSummary",
+      "type": "Lambda",
+      "component_schema": {
+        "name": "Lambda",
+        "component": "Lambda",
+        "component_source": "custom",
+        "input_type": {
+          "title": "*schema.Message",
+          "description": ""
+        },
+        "output_type": {
+          "title": "string",
+          "description": ""
+        },
+        "extra_property": {
+          "schema": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "has_option": {
+                "type": "boolean",
+                "description": ""
+              },
+              "interaction_type": {
+                "type": "string",
+                "description": "",
+                "enum": [
+                  "invoke",
+                  "stream",
+                  "collect",
+                  "transform"
+                ]
+              },
+              "option_package_path": {
+                "type": "string",
+                "description": ""
+              }
+            },
+            "propertyOrder": [
+              "has_option",
+              "interaction_type",
+              "option_package_path"
+            ]
+          }
+        },
+        "is_io_type_mutable": false,
+        "version": "1.0.0"
+      },
+      "layoutData": {
+        "position": {
+          "x": 1240,
+          "y": 360
+        }
+      },
+      "node_option": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "",
+      "name": "",
+      "sourceWorkflowNodeId": "start",
+      "targetWorkflowNodeId": "InputToTemplate",
+      "source_node_key": "start",
+      "target_node_key": "InputToTemplate"
+    },
+    {
+      "id": "",
+      "name": "",
+      "sourceWorkflowNodeId": "InputToTemplate",
+      "targetWorkflowNodeId": "ChatTemplate",
+      "source_node_key": "InputToTemplate",
+      "target_node_key": "ChatTemplate"
+    },
+    {
+      "id": "",
+      "name": "",
+      "sourceWorkflowNodeId": "ChatTemplate",
+      "targetWorkflowNodeId": "ChatModel",
+      "source_node_key": "ChatTemplate",
+      "target_node_key": "ChatModel"
+    },
+    {
+      "id": "",
+      "name": "",
+      "sourceWorkflowNodeId": "ChatModel",
+      "targetWorkflowNodeId": "OutputToSummary",
+      "source_node_key": "ChatModel",
+      "target_node_key": "OutputToSummary"
+    },
+    {
+      "id": "",
+      "name": "",
+      "sourceWorkflowNodeId": "OutputToSummary",
+      "targetWorkflowNodeId": "end",
+      "source_node_key": "OutputToSummary",
+      "target_node_key": "end"
+    }
+  ]
+}
