@@ -1,0 +1,10 @@
+{
+  "name": "oncallgpt-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ChatGPT 风格前端界面，支持流式对话与 AI Ops",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  }
+}

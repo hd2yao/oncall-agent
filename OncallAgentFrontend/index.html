@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OncallGPT 前端</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <aside class="sidebar" id="sidebar" data-collapsed="false">
+        <div class="sidebar-header">
+          <div class="brand">
+            <span class="brand-mark"></span>
+            <span class="brand-name">OncallGPT</span>
+          </div>
+          <button class="icon-btn" id="toggleSidebar" aria-label="折叠侧边栏">
+            <span class="icon">≡</span>
+          </button>
+        </div>
+        <button class="primary-btn" id="newChatBtn">
+          <span>＋ 新建对话</span>
+        </button>
+        <div class="sidebar-section">
+          <div class="section-title">历史记录</div>
+          <ul class="history-list" id="historyList"></ul>
+        </div>
+        <div class="sidebar-footer">
+          <div class="footer-card">
+            <p>已连接：<span class="status-dot"></span> localhost:6871</p>
+            <small>深色主题 · SSE 流式</small>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="mode-switch">
+            <label for="modeSelect">模式</label>
+            <select id="modeSelect">
+              <option value="quick">快速</option>
+              <option value="stream">流式</option>
+            </select>
+          </div>
+          <div class="top-actions">
+            <div class="ops-group">
+              <button class="ghost-btn" data-op="health">系统检查</button>
+              <button class="ghost-btn" data-op="logs">日志分析</button>
+              <button class="ghost-btn" data-op="perf">性能诊断</button>
+            </div>
+            <button class="ghost-btn" id="uploadBtn">文件上传</button>
+            <button class="ghost-btn" id="clearChatBtn">清空对话</button>
+          </div>
+        </header>
+
+        <section class="messages" id="messages"></section>
+
+        <div class="typing hidden" id="typingIndicator" aria-live="polite">
+          <span></span><span></span><span></span>
+          <em>AI 正在思考…</em>
+        </div>
+
+        <footer class="composer">
+          <div class="input-shell">
+            <textarea
+              id="promptInput"
+              rows="1"
+              placeholder="输入你的问题，Enter 发送，Shift + Enter 换行"
+            ></textarea>
+            <button class="send-btn" id="sendBtn">发送</button>
+          </div>
+          <div class="composer-meta">
+            <div class="meta-left">
+              <span class="meta-pill">Markdown</span>
+              <span class="meta-pill">代码高亮</span>
+              <span class="meta-pill">自动滚动</span>
+            </div>
+            <div class="meta-right">
+              <input type="file" id="fileInput" hidden />
+              <button class="ghost-btn" id="fileTriggerBtn">上传文件</button>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/common.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
