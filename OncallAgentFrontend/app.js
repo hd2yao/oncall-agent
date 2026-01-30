@@ -215,9 +215,9 @@ async function sendMessage() {
   const mode = elements.modeSelect.value;
   try {
     if (mode === "stream") {
-      await sendStreamMessage();
+      await sendStreamMessage(text);
     } else {
-      await sendQuickMessage();
+      await sendQuickMessage(text);
     }
   } catch (error) {
     console.error(error);
@@ -227,15 +227,15 @@ async function sendMessage() {
   }
 }
 
-async function sendQuickMessage() {
+async function sendQuickMessage(question) {
   const conversation = getCurrentConversation();
   if (!conversation) return;
   const res = await fetch(`${API_BASE}/api/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      conversation_id: conversation.id,
-      messages: conversation.messages,
+      id: conversation.id,
+      question,
     }),
   });
 
@@ -244,12 +244,11 @@ async function sendQuickMessage() {
   }
 
   const data = await res.json();
-  const reply =
-    data.reply || data.message || data.content || data.text || JSON.stringify(data);
-  appendMessage("assistant", reply);
+  const reply = extractReply(data);
+  appendMessage("assistant", reply || "OK");
 }
 
-async function sendStreamMessage() {
+async function sendStreamMessage(question) {
   const conversation = getCurrentConversation();
   if (!conversation) return;
 
@@ -257,8 +256,8 @@ async function sendStreamMessage() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      conversation_id: conversation.id,
-      messages: conversation.messages,
+      id: conversation.id,
+      question,
     }),
   });
 
@@ -311,10 +310,37 @@ async function sendStreamMessage() {
 function parseStreamPayload(payload) {
   try {
     const data = JSON.parse(payload);
-    return data.delta || data.content || data.message || data.text || "";
+    return (
+      data.delta ||
+      data.content ||
+      data.message ||
+      data.text ||
+      extractReply(data)
+    );
   } catch (error) {
     return payload;
   }
+}
+
+function extractReply(data) {
+  if (!data) return "";
+  if (typeof data === "string") return data;
+  if (data.data && typeof data.data === "object") {
+    const nested =
+      data.data.answer ||
+      data.data.reply ||
+      data.data.content ||
+      data.data.text ||
+      data.data.message;
+    if (nested) return nested;
+  }
+  if (data.answer || data.reply || data.content || data.text) {
+    return data.answer || data.reply || data.content || data.text;
+  }
+  if (data.message && data.message !== "OK") {
+    return data.message;
+  }
+  return "";
 }
 
 function escapeHtml(text) {

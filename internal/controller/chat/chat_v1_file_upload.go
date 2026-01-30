@@ -70,6 +70,9 @@ func (c *ControllerV1) FileUpload(ctx context.Context, req *v1.FileUploadReq) (r
 func buildIntoIndex(ctx context.Context, path string) error {
 	// 1. 构建知识索引管道（Start → FileLoader → Splitter → Indexer → End）
 	r, err := knowledge_index_pipeline.BuildKnowledgeIndexing(ctx)
+	if err != nil {
+		return err
+	}
 
 	// 2. 删除 biz 数据 metadata 中 _source 一样的数据
 	// 创建文件加载器
@@ -83,6 +86,9 @@ func buildIntoIndex(ctx context.Context, path string) error {
 	if err != nil {
 		return err
 	}
+	if len(docs) == 0 {
+		return fmt.Errorf("no documents loaded from path: %s", path)
+	}
 	cli, err := client.NewMilvusClient(ctx)
 	if err != nil {
 		return err
@@ -90,7 +96,7 @@ func buildIntoIndex(ctx context.Context, path string) error {
 
 	// 查询所有 metadata 中 _source 一样的数据并删除
 	// 例如：{"_file_name":"告警处理手册.md","_extension":".md","title":"与下游对账发现差异","_source":"docs/告警处理手册.md"}
-	expr := fmt.Sprintf(`metadata["_Source"] == "%s"`, docs[0].MetaData["_Source"])
+	expr := fmt.Sprintf(`metadata["_source"] == "%s"`, docs[0].MetaData["_source"])
 	queryResult, err := cli.Query(ctx, common.MilvusCollectionName, []string{}, expr, []string{"id"})
 	if err != nil {
 		return err
@@ -110,7 +116,7 @@ func buildIntoIndex(ctx context.Context, path string) error {
 
 		// 删除旧数据(避免重复索引)
 		if len(idsToDelete) > 0 {
-			deleteExpr := fmt.Sprintf(`id in ["%s"]`, strings.Join(idsToDelete, ","))
+			deleteExpr := fmt.Sprintf(`id in ["%s"]`, strings.Join(idsToDelete, `","`))
 			err = cli.Delete(ctx, common.MilvusCollectionName, "", deleteExpr)
 			if err != nil {
 				fmt.Printf("[warn] delete existing data failed: %v\n", err)

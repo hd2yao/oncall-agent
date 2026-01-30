@@ -13,7 +13,7 @@ import (
 func NewMilvusClient(ctx context.Context) (cli.Client, error) {
 	// 1. 先连接 default 数据库
 	defaultClient, err := cli.NewClient(ctx, cli.Config{
-		Address: "localhost:19530",
+		Address: "localhost:19531",
 		DBName:  "default",
 	})
 	if err != nil {
@@ -43,7 +43,7 @@ func NewMilvusClient(ctx context.Context) (cli.Client, error) {
 
 	// 3. 创建连接到 agent 数据库的客户端
 	agentClient, err := cli.NewClient(ctx, cli.Config{
-		Address: "localhost:19530",
+		Address: "localhost:19531",
 		DBName:  common.MilvusDBName,
 	})
 	if err != nil {
@@ -106,6 +106,12 @@ func NewMilvusClient(ctx context.Context) (cli.Client, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to create vector index: %w", err)
 		}
+	}
+
+	// 5. 确保 collection 已加载到内存（否则检索/查询会失败）
+	err = agentClient.LoadCollection(ctx, common.MilvusCollectionName, false)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load collection: %w", err)
 	}
 
 	// 关闭 default 数据库连接
