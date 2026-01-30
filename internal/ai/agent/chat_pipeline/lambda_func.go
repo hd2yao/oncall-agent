@@ -7,7 +7,7 @@ import (
 
 // newInputToRagLambda component initialization function of node 'InputToRag' in graph 'EinoAgent'
 func newInputToRagLambda(ctx context.Context, input *UserMessage, opts ...any) (output string, err error) {
-	panic("implement me")
+	return input.Query, nil
 }
 
 // newInputToChatLambda component initialization function of node 'InputToChat' in graph 'EinoAgent'

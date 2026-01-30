@@ -28,3 +28,12 @@ type FileUploadRes struct {
 	FilePath string `json:"filePath" dc:"文件保存路径"`
 	FileSize int64  `json:"fileSize" dc:"文件大小(字节)"`
 }
+
+type AIOpsReq struct {
+	g.Meta `path:"/ai_ops" method:"post" summary:"AI 运维"`
+}
+
+type AIOpsRes struct {
+	Result string   `json:"result"`
+	Detail []string `json:"detail"`
+}
